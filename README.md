@@ -40,7 +40,7 @@ A modern, web-based monitoring dashboard for Linux systems with Docker container
 ### One-Script Installation
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/Lord0fthetrains/os/main/install.sh | bash
+curl -sSL https://raw.githubusercontent.com/Lord0fthetrains/os/refs/heads/main/install.sh | bash
 ```
 
 The installer will:
