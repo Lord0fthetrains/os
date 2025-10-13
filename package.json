@@ -28,17 +28,17 @@
     "nodejs",
     "typescript"
   ],
-  "author": "Your Name",
+  "author": "Lord0fthetrains",
   "license": "MIT",
   "devDependencies": {
     "concurrently": "^8.2.2"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/linux-dashboard.git"
+    "url": "https://github.com/Lord0fthetrains/os.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/linux-dashboard/issues"
+    "url": "https://github.com/Lord0fthetrains/os/issues"
   },
-  "homepage": "https://github.com/yourusername/linux-dashboard#readme"
+  "homepage": "https://github.com/Lord0fthetrains/os#readme"
 }

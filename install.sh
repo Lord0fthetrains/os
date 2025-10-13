@@ -15,7 +15,7 @@ NC='\033[0m' # No Color
 # Configuration
 DASHBOARD_DIR="/opt/linux-dashboard"
 SERVICE_USER="dashboard"
-REPO_URL="https://github.com/yourusername/linux-dashboard.git"
+REPO_URL="https://github.com/Lord0fthetrains/os.git"
 BACKUP_DIR="/opt/linux-dashboard-backup"
 
 # Print colored output

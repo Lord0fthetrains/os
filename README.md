@@ -40,7 +40,7 @@ A modern, web-based monitoring dashboard for Linux systems with Docker container
 ### One-Script Installation
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/yourusername/linux-dashboard/main/install.sh | bash
+curl -sSL https://raw.githubusercontent.com/Lord0fthetrains/os/main/install.sh | bash
 ```
 
 The installer will:
@@ -54,7 +54,7 @@ The installer will:
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/linux-dashboard.git
+   git clone https://github.com/Lord0fthetrains/os.git
    cd linux-dashboard
    ```
 
@@ -310,9 +310,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Support
 
-- 📖 [Documentation](https://github.com/yourusername/linux-dashboard/wiki)
-- 🐛 [Report Issues](https://github.com/yourusername/linux-dashboard/issues)
-- 💬 [Discussions](https://github.com/yourusername/linux-dashboard/discussions)
+- 📖 [Documentation](https://github.com/Lord0fthetrains/os/wiki)
+- 🐛 [Report Issues](https://github.com/Lord0fthetrains/os/issues)
+- 💬 [Discussions](https://github.com/Lord0fthetrains/os/discussions)
 - 📧 [Email Support](mailto:support@example.com)
 
 ---
