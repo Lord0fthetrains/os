@@ -208,6 +208,10 @@ setup_project() {
     # Create backup if directory exists
     if [[ -d "$DASHBOARD_DIR" ]]; then
         print_warning "Dashboard directory already exists, creating backup..."
+        # Remove existing backup if it exists
+        if [[ -d "$BACKUP_DIR" ]]; then
+            sudo rm -rf $BACKUP_DIR
+        fi
         sudo mv $DASHBOARD_DIR $BACKUP_DIR
     fi
 
