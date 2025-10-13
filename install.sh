@@ -247,8 +247,10 @@ setup_project() {
 configure_environment() {
     print_status "Configuring environment..."
 
+    cd $DASHBOARD_DIR
+
     # Create .env file
-    cat > .env << EOF
+    sudo tee .env > /dev/null << EOF
 # Backend Configuration
 PORT=5000
 FRONTEND_URL=http://localhost:3000
@@ -260,6 +262,9 @@ NEWS_API_KEY=
 # Docker Configuration
 DOCKER_SOCKET_PATH=/var/run/docker.sock
 EOF
+
+    # Set proper ownership
+    sudo chown $USER:$USER .env
 
     print_success "Environment configured"
 }
