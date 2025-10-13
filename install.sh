@@ -215,15 +215,25 @@ setup_project() {
     sudo mkdir -p $DASHBOARD_DIR
     sudo chown $USER:$USER $DASHBOARD_DIR
 
-    # Clone repository (for now, we'll create the files directly)
-    print_status "Setting up project files..."
+    # Clone repository
+    print_status "Cloning project from GitHub..."
+    cd /tmp
+    git clone $REPO_URL linux-dashboard-temp
+    cd linux-dashboard-temp
     
-    # This would normally clone from git, but for this demo we'll create the structure
-    cd $DASHBOARD_DIR
+    # Copy all files to the target directory
+    print_status "Copying project files..."
+    cp -r * $DASHBOARD_DIR/
+    cp -r .* $DASHBOARD_DIR/ 2>/dev/null || true
     
-    # Create basic project structure
-    mkdir -p backend frontend
-    print_success "Project directory created at $DASHBOARD_DIR"
+    # Clean up temporary directory
+    cd /
+    rm -rf /tmp/linux-dashboard-temp
+    
+    # Set proper permissions
+    sudo chown -R $USER:$USER $DASHBOARD_DIR
+    
+    print_success "Project files copied to $DASHBOARD_DIR"
 }
 
 # Configure environment
@@ -251,20 +261,30 @@ EOF
 build_and_start() {
     print_status "Building and starting services..."
 
-    # Copy project files (in a real scenario, these would be copied from the repo)
-    print_status "Please copy your project files to $DASHBOARD_DIR"
-    print_status "Then run: cd $DASHBOARD_DIR && docker-compose up -d"
+    cd $DASHBOARD_DIR
 
-    # For demo purposes, show what would happen
-    print_status "To start the dashboard:"
-    echo "  cd $DASHBOARD_DIR"
-    echo "  docker-compose up -d"
-    echo ""
-    print_status "To view logs:"
-    echo "  docker-compose logs -f"
-    echo ""
-    print_status "To stop the dashboard:"
-    echo "  docker-compose down"
+    # Check if docker-compose.yml exists
+    if [[ ! -f "docker-compose.yml" ]]; then
+        print_error "docker-compose.yml not found. Installation may have failed."
+        return 1
+    fi
+
+    # Start the services
+    print_status "Starting Docker containers..."
+    docker-compose up -d
+
+    if [[ $? -eq 0 ]]; then
+        print_success "Dashboard started successfully!"
+        print_status "Access your dashboard at: http://localhost:3000"
+        print_status "Backend API at: http://localhost:5000"
+        echo ""
+        print_status "Useful commands:"
+        echo "  View logs: docker-compose logs -f"
+        echo "  Stop dashboard: docker-compose down"
+        echo "  Restart: docker-compose restart"
+    else
+        print_error "Failed to start dashboard. Check logs with: docker-compose logs"
+    fi
 }
 
 # Create systemd service (optional)
