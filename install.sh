@@ -212,7 +212,10 @@ setup_project() {
         if [[ -d "$BACKUP_DIR" ]]; then
             sudo rm -rf $BACKUP_DIR
         fi
-        sudo mv $DASHBOARD_DIR $BACKUP_DIR
+        # Create backup with timestamp
+        BACKUP_DIR_WITH_TIMESTAMP="${BACKUP_DIR}-$(date +%Y%m%d-%H%M%S)"
+        sudo mv $DASHBOARD_DIR $BACKUP_DIR_WITH_TIMESTAMP
+        print_status "Backup created at: $BACKUP_DIR_WITH_TIMESTAMP"
     fi
 
     # Create directory
