@@ -56,7 +56,11 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
     print_success "Cleanup completed"
 fi
 
-# Step 3: Build and start services
+# Step 3: Clean up old containers
+print_status "Cleaning up old containers..."
+docker-compose rm -f
+
+# Step 4: Build and start services
 print_status "Building and starting services..."
 if docker-compose up -d --build; then
     print_success "Services built and started successfully"
@@ -65,11 +69,11 @@ else
     exit 1
 fi
 
-# Step 4: Show status
+# Step 5: Show status
 print_status "Checking service status..."
 docker-compose ps
 
-# Step 5: Get access information
+# Step 6: Get access information
 print_status "Getting access information..."
 MAIN_IP=$(hostname -I | awk '{print $1}')
 FRONTEND_PORT=$(grep -o '"[0-9]*:3000"' docker-compose.yml | grep -o '[0-9]*' | head -1)

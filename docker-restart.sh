@@ -68,6 +68,10 @@ restart_services() {
     docker-compose down
     print_success "Services stopped"
     
+    # Clean up old containers
+    print_status "Cleaning up old containers..."
+    docker-compose rm -f
+    
     # Build and start
     print_status "Building and starting services..."
     docker-compose up -d --build

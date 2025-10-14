@@ -16,6 +16,10 @@ fi
 echo "Stopping all services..."
 docker-compose down
 
+echo "Removing old containers and images..."
+docker-compose rm -f
+docker system prune -f
+
 echo "Building and starting services..."
 docker-compose up -d --build
 
