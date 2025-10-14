@@ -11,7 +11,9 @@ import {
   FileText,
   Users,
   AlertTriangle,
-  Power
+  Power,
+  Pin,
+  PinOff
 } from 'lucide-react';
 import { useVersion } from '../contexts/VersionContext';
 
@@ -38,6 +40,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const { versionInfo, isChecking, checkForUpdates } = useVersion();
   const [detectedServices, setDetectedServices] = useState<DetectedService[]>([]);
   const [isScanning, setIsScanning] = useState(false);
+  const [pinServices, setPinServices] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem('pinServices') === '1';
+    } catch {
+      return false;
+    }
+  });
+
+  const togglePin = () => {
+    setPinServices((prev) => {
+      const next = !prev;
+      try { localStorage.setItem('pinServices', next ? '1' : '0'); } catch {}
+      return next;
+    });
+  };
 
   const scanForServices = async () => {
     setIsScanning(true);
@@ -173,7 +190,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       )}
 
       {/* Detected Services */}
-      {isOpen && (
+      {(isOpen || pinServices) && (
         <div className="p-4 border-t border-gray-200 dark:border-dark-700">
           <div className="flex items-center justify-between mb-3">
             <span className="text-sm font-medium text-gray-900 dark:text-white">
@@ -185,6 +202,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
               className="p-1 hover:bg-gray-100 dark:hover:bg-dark-700 rounded transition-colors disabled:opacity-50"
             >
               <RefreshCw className={`w-4 h-4 ${isScanning ? 'animate-spin' : ''}`} />
+            </button>
+            <button
+              onClick={togglePin}
+              className="p-1 ml-2 hover:bg-gray-100 dark:hover:bg-dark-700 rounded transition-colors"
+              title={pinServices ? 'Unpin' : 'Pin'}
+            >
+              {pinServices ? (
+                <Pin className="w-4 h-4" />
+              ) : (
+                <PinOff className="w-4 h-4" />
+              )}
             </button>
           </div>
           
@@ -216,6 +244,44 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       className="p-1 hover:bg-gray-200 dark:hover:bg-dark-600 rounded transition-colors"
                     >
                       <ExternalLink className="w-3 h-3 text-gray-500 dark:text-gray-400" />
+                    </a>
+                  )}
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Floating pinned list when sidebar collapsed */}
+      {!isOpen && pinServices && (
+        <div className="fixed left-16 top-20 z-30 w-72 rounded-lg shadow-lg border"
+          style={{ backgroundColor: 'var(--serversphere-card)', borderColor: 'var(--serversphere-border)' }}>
+          <div className="flex items-center justify-between px-3 py-2" style={{ borderBottom: '1px solid var(--serversphere-border)' }}>
+            <span className="text-sm font-medium">Detected Services</span>
+            <div className="flex items-center gap-1">
+              <button onClick={scanForServices} disabled={isScanning} className="p-1 rounded hover:bg-gray-100 dark:hover:bg-dark-700">
+                <RefreshCw className={`w-4 h-4 ${isScanning ? 'animate-spin' : ''}`} />
+              </button>
+              <button onClick={togglePin} className="p-1 rounded hover:bg-gray-100 dark:hover:bg-dark-700" title="Unpin">
+                <Pin className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+          <div className="p-3 space-y-2 max-h-56 overflow-y-auto">
+            {detectedServices.length === 0 ? (
+              <p className="text-xs" style={{ color: 'var(--serversphere-text-muted)' }}>No services. Refresh to scan.</p>
+            ) : (
+              detectedServices.map((service) => (
+                <div key={service.port} className="flex items-center justify-between p-2 rounded" style={{ backgroundColor: '#2a2a4e' }}>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span className="text-xs font-medium">{service.service}</span>
+                    <span className="text-xs" style={{ color: 'var(--serversphere-text-muted)' }}>:{service.port}</span>
+                  </div>
+                  {service.url && (
+                    <a href={service.url} target="_blank" rel="noopener noreferrer" className="p-1 rounded hover:bg-gray-200 dark:hover:bg-dark-600">
+                      <ExternalLink className="w-3 h-3" />
                     </a>
                   )}
                 </div>
