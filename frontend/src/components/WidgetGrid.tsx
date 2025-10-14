@@ -82,14 +82,14 @@ export const WidgetGrid: React.FC<WidgetGridProps> = ({ className = '' }) => {
 
   const defaultLayouts = {
     lg: [
-      { i: 'cpu', x: 0, y: 0, w: 3, h: 4 },
-      { i: 'ram', x: 3, y: 0, w: 3, h: 4 },
-      { i: 'disk', x: 6, y: 0, w: 3, h: 4 },
-      { i: 'network', x: 9, y: 0, w: 3, h: 4 },
-      { i: 'docker', x: 0, y: 4, w: 6, h: 6 },
-      { i: 'weather', x: 6, y: 4, w: 3, h: 4 },
-      { i: 'news', x: 9, y: 4, w: 3, h: 4 },
-      { i: 'crypto', x: 6, y: 8, w: 6, h: 4 },
+      { i: 'cpu', x: 0, y: 0, w: 3, h: 5 },
+      { i: 'ram', x: 3, y: 0, w: 3, h: 5 },
+      { i: 'disk', x: 6, y: 0, w: 3, h: 5 },
+      { i: 'network', x: 9, y: 0, w: 3, h: 5 },
+      { i: 'docker', x: 0, y: 5, w: 6, h: 7 },
+      { i: 'weather', x: 6, y: 5, w: 3, h: 5 },
+      { i: 'news', x: 9, y: 5, w: 3, h: 5 },
+      { i: 'crypto', x: 6, y: 10, w: 6, h: 5 },
     ],
     md: [
       { i: 'cpu', x: 0, y: 0, w: 6, h: 4 },

@@ -104,19 +104,19 @@ export const RAMWidget: React.FC<RAMWidgetProps> = ({ stats }) => {
         {/* Memory Details */}
         <div className="grid grid-cols-2 gap-2 text-xs">
           <div className="metric-card">
-            <div className="metric-value text-sm">{formatBytes(stats.used)}</div>
+            <div className="metric-value text-sm truncate" title={formatBytes(stats.used)}>{formatBytes(stats.used)}</div>
             <div className="metric-label">Used</div>
           </div>
           <div className="metric-card">
-            <div className="metric-value text-sm">{formatBytes(stats.cached)}</div>
+            <div className="metric-value text-sm truncate" title={formatBytes(stats.cached)}>{formatBytes(stats.cached)}</div>
             <div className="metric-label">Cached</div>
           </div>
           <div className="metric-card">
-            <div className="metric-value text-sm">{formatBytes(stats.free)}</div>
+            <div className="metric-value text-sm truncate" title={formatBytes(stats.free)}>{formatBytes(stats.free)}</div>
             <div className="metric-label">Free</div>
           </div>
           <div className="metric-card">
-            <div className="metric-value text-sm">{formatBytes(stats.total)}</div>
+            <div className="metric-value text-sm truncate" title={formatBytes(stats.total)}>{formatBytes(stats.total)}</div>
             <div className="metric-label">Total</div>
           </div>
         </div>

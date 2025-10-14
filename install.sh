@@ -249,11 +249,14 @@ configure_environment() {
 
     cd $DASHBOARD_DIR
 
+    # Get the main IP address
+    MAIN_IP=$(hostname -I | awk '{print $1}')
+    
     # Create .env file
     sudo tee .env > /dev/null << EOF
 # Backend Configuration
 PORT=5000
-FRONTEND_URL=http://localhost:3200
+FRONTEND_URL=http://${MAIN_IP}:3200
 
 # API Keys (optional - widgets will show error messages if not configured)
 OPENWEATHER_API_KEY=
@@ -286,9 +289,12 @@ build_and_start() {
     docker-compose up -d
 
     if [[ $? -eq 0 ]]; then
+        # Get the main IP address
+        MAIN_IP=$(hostname -I | awk '{print $1}')
+        
         print_success "Dashboard started successfully!"
-        print_status "Access your dashboard at: http://localhost:3200"
-        print_status "Backend API at: http://localhost:5000"
+        print_status "Access your dashboard at: http://${MAIN_IP}:3200"
+        print_status "Backend API at: http://${MAIN_IP}:5000"
         echo ""
         print_status "Useful commands:"
         echo "  View logs: docker-compose logs -f"
@@ -364,7 +370,9 @@ main() {
     echo "   cd $DASHBOARD_DIR"
     echo "   docker-compose up -d"
     echo ""
-    print_status "Access the dashboard at: http://localhost:3000"
+    # Get the main IP address
+    MAIN_IP=$(hostname -I | awk '{print $1}')
+    print_status "Access the dashboard at: http://${MAIN_IP}:3200"
     echo ""
     print_status "For support, visit: https://github.com/yourusername/linux-dashboard"
 }
