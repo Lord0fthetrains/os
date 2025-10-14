@@ -7,6 +7,8 @@ import systemRoutes from './routes/system';
 import dockerRoutes from './routes/docker';
 import widgetRoutes from './routes/widgets';
 import updateRoutes from './routes/update';
+import versionRoutes from './routes/version';
+import portRoutes from './routes/ports';
 import { SocketHandler } from './websocket/socketHandler';
 
 // Load environment variables
@@ -33,6 +35,8 @@ app.use('/api/system', systemRoutes);
 app.use('/api/docker', dockerRoutes);
 app.use('/api/widgets', widgetRoutes);
 app.use('/api/update', updateRoutes);
+app.use('/api/version', versionRoutes);
+app.use('/api/ports', portRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
