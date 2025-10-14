@@ -32,7 +32,7 @@ services:
     container_name: linux-dashboard-frontend
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "3200:3000"
     depends_on:
       - backend
     networks:

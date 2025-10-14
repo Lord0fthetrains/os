@@ -253,7 +253,7 @@ configure_environment() {
     sudo tee .env > /dev/null << EOF
 # Backend Configuration
 PORT=5000
-FRONTEND_URL=http://localhost:3000
+FRONTEND_URL=http://localhost:3200
 
 # API Keys (optional - widgets will show error messages if not configured)
 OPENWEATHER_API_KEY=
@@ -287,7 +287,7 @@ build_and_start() {
 
     if [[ $? -eq 0 ]]; then
         print_success "Dashboard started successfully!"
-        print_status "Access your dashboard at: http://localhost:3000"
+        print_status "Access your dashboard at: http://localhost:3200"
         print_status "Backend API at: http://localhost:5000"
         echo ""
         print_status "Useful commands:"

@@ -81,7 +81,7 @@ The installer will:
    ```
 
 5. **Access the dashboard**
-   Open http://localhost:3000 in your browser
+   Open http://localhost:3200 in your browser
 
 ## Configuration
 
@@ -92,7 +92,7 @@ Create a `.env` file in the project root:
 ```env
 # Backend Configuration
 PORT=5000
-FRONTEND_URL=http://localhost:3000
+FRONTEND_URL=http://localhost:3200
 
 # API Keys (optional)
 OPENWEATHER_API_KEY=your_openweather_api_key_here
@@ -173,7 +173,7 @@ cd frontend
 npm run dev
 ```
 
-The frontend will start on http://localhost:3000
+The frontend will start on http://localhost:3200
 
 ### Building for Production
 
