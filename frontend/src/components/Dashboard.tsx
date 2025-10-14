@@ -4,6 +4,10 @@ import { WidgetGrid } from './WidgetGrid';
 import { SettingsPanel } from './SettingsPanel';
 import { Sidebar } from './Sidebar';
 import { ServicesPage } from './ServicesPage';
+import { LogsPage } from './LogsPage';
+import { UsersPage } from './UsersPage';
+import { AlertsPage } from './AlertsPage';
+import { ServiceControlsPage } from './ServiceControlsPage';
 import { useTheme } from '../contexts/ThemeContext';
 import { useWebSocket } from '../contexts/WebSocketContext';
 
@@ -15,7 +19,7 @@ export const Dashboard: React.FC = () => {
   const [currentPage, setCurrentPage] = useState('dashboard');
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-dark-900 transition-colors">
+    <div className="min-h-screen serversphere-main transition-colors">
       {/* Sidebar */}
       <Sidebar 
         isOpen={isSidebarOpen}
@@ -25,7 +29,7 @@ export const Dashboard: React.FC = () => {
       />
 
       {/* Header */}
-      <header className={`bg-white dark:bg-dark-800 shadow-sm border-b border-gray-200 dark:border-dark-700 transition-all duration-300 ${
+      <header className={`serversphere-header shadow-sm transition-all duration-300 ${
         isSidebarOpen ? 'ml-80' : 'ml-16'
       }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -38,8 +42,8 @@ export const Dashboard: React.FC = () => {
               >
                 <Menu className="w-5 h-5 text-gray-600 dark:text-gray-400" />
               </button>
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                Linux Dashboard
+              <h1 className="text-2xl font-bold serversphere-logo">
+                ServerSphere
               </h1>
               <div className="flex items-center gap-2">
                 {isConnected ? (
@@ -91,6 +95,10 @@ export const Dashboard: React.FC = () => {
           </div>
         )}
         {currentPage === 'services' && <ServicesPage />}
+        {currentPage === 'logs' && <LogsPage />}
+        {currentPage === 'users' && <UsersPage />}
+        {currentPage === 'alerts' && <AlertsPage />}
+        {currentPage === 'controls' && <ServiceControlsPage />}
         {currentPage === 'settings' && (
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
             <div className="text-center py-12">
@@ -107,7 +115,7 @@ export const Dashboard: React.FC = () => {
       </main>
 
       {/* Footer */}
-      <footer className={`bg-white dark:bg-dark-800 border-t border-gray-200 dark:border-dark-700 mt-8 transition-all duration-300 ${
+      <footer className={`serversphere-header border-t mt-8 transition-all duration-300 ${
         isSidebarOpen ? 'ml-80' : 'ml-16'
       }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">

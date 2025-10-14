@@ -7,7 +7,11 @@ import {
   RefreshCw, 
   ExternalLink,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  FileText,
+  Users,
+  AlertTriangle,
+  Power
 } from 'lucide-react';
 import { useVersion } from '../contexts/VersionContext';
 
@@ -38,7 +42,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const scanForServices = async () => {
     setIsScanning(true);
     try {
-      const response = await fetch('/api/ports/scan');
+      const ipRes = await fetch('/api/ports/local-ip');
+      const ipData = await ipRes.json();
+      const hostIp = ipData.ip || 'localhost';
+      const response = await fetch(`/api/ports/scan?host=${encodeURIComponent(hostIp)}`);
       const data = await response.json();
       setDetectedServices(data.services || []);
     } catch (error) {
@@ -66,28 +73,37 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const navigationItems = [
     { id: 'dashboard', label: 'Dashboard', icon: Home },
     { id: 'services', label: 'Services', icon: Server },
+    { id: 'logs', label: 'Logs', icon: FileText },
+    { id: 'users', label: 'Users', icon: Users },
+    { id: 'alerts', label: 'Alerts', icon: AlertTriangle },
+    { id: 'controls', label: 'Service Controls', icon: Power },
     { id: 'settings', label: 'Settings', icon: Settings },
   ];
 
   return (
-    <div className={`fixed left-0 top-0 h-full bg-white dark:bg-dark-800 border-r border-gray-200 dark:border-dark-700 transition-all duration-300 z-40 ${
+    <div className={`fixed left-0 top-0 h-full serversphere-sidebar border-r transition-all duration-300 z-40 ${
       isOpen ? 'w-80' : 'w-16'
-    }`}>
+    }`}
+    style={{ borderColor: 'var(--serversphere-border)' }}>
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-dark-700">
+      <div className="flex items-center justify-between p-4 border-b" style={{ borderColor: 'var(--serversphere-border)' }}>
         {isOpen && (
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-            Dashboard
-          </h2>
+          <div className="flex items-center gap-2">
+            <div className="serversphere-logo-icon text-2xl">🐧</div>
+            <h2 className="text-lg font-semibold serversphere-logo">
+              ServerSphere
+            </h2>
+          </div>
         )}
         <button
           onClick={onToggle}
           className="p-2 hover:bg-gray-100 dark:hover:bg-dark-700 rounded-lg transition-colors"
+          style={{ backgroundColor: 'rgba(42, 42, 78, 0.3)' }}
         >
           {isOpen ? (
-            <ChevronLeft className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+            <ChevronLeft className="w-5 h-5" style={{ color: 'var(--serversphere-text-muted)' }} />
           ) : (
-            <ChevronRight className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+            <ChevronRight className="w-5 h-5" style={{ color: 'var(--serversphere-text-muted)' }} />
           )}
         </button>
       </div>
@@ -102,10 +118,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <button
               key={item.id}
               onClick={() => onNavigate(item.id)}
-              className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
-                isActive
-                  ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300'
-                  : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-700'
+              className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors serversphere-nav-item ${
+                isActive ? 'active' : ''
               }`}
             >
               <Icon className="w-5 h-5 flex-shrink-0" />

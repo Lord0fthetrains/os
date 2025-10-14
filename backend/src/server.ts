@@ -9,6 +9,10 @@ import widgetRoutes from './routes/widgets';
 import updateRoutes from './routes/update';
 import versionRoutes from './routes/version';
 import portRoutes from './routes/ports';
+import logsRoutes from './routes/logs';
+import usersRoutes from './routes/users';
+import alertsRoutes from './routes/alerts';
+import servicesRoutes from './routes/services';
 import { SocketHandler } from './websocket/socketHandler';
 
 // Load environment variables
@@ -37,6 +41,10 @@ app.use('/api/widgets', widgetRoutes);
 app.use('/api/update', updateRoutes);
 app.use('/api/version', versionRoutes);
 app.use('/api/ports', portRoutes);
+app.use('/api/logs', logsRoutes);
+app.use('/api/users', usersRoutes);
+app.use('/api/alerts', alertsRoutes);
+app.use('/api/services', servicesRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

@@ -28,16 +28,16 @@ export const ServicesPage: React.FC = () => {
   const scanForServices = async () => {
     setIsScanning(true);
     try {
-      const [servicesResponse, ipResponse] = await Promise.all([
-        fetch('/api/ports/scan'),
-        fetch('/api/ports/local-ip')
-      ]);
+      const ipResponse = await fetch('/api/ports/local-ip');
+      const ipData = await ipResponse.json();
+      const hostIp = ipData.ip || 'localhost';
+
+      const servicesResponse = await fetch(`/api/ports/scan?host=${encodeURIComponent(hostIp)}`);
       
       const servicesData = await servicesResponse.json();
-      const ipData = await ipResponse.json();
       
       setDetectedServices(servicesData.services || []);
-      setLocalIP(ipData.ip || 'localhost');
+      setLocalIP(hostIp);
       setLastScanned(new Date());
     } catch (error) {
       console.error('Error scanning for services:', error);
@@ -84,18 +84,22 @@ export const ServicesPage: React.FC = () => {
   };
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
+    <div className="p-6 max-w-7xl mx-auto" style={{ color: 'var(--serversphere-text)' }}>
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+        <h1 className="text-3xl font-bold mb-2" style={{ color: 'var(--serversphere-text)' }}>
           Detected Services
         </h1>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p style={{ color: 'var(--serversphere-text-muted)' }}>
           Discover and access web services running on your system
         </p>
       </div>
 
       {/* Controls */}
-      <div className="bg-white dark:bg-dark-800 rounded-lg shadow-sm border border-gray-200 dark:border-dark-700 p-6 mb-6">
+      <div className="rounded-lg shadow-sm border p-6 mb-6" style={{ 
+        backgroundColor: 'var(--serversphere-card)', 
+        borderColor: 'var(--serversphere-border)',
+        boxShadow: '0 4px 10px rgba(0,0,0,0.3)'
+      }}>
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">

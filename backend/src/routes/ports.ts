@@ -6,16 +6,22 @@ const router = Router();
 // Scan for open ports
 router.get('/scan', async (req, res) => {
   try {
-    const { host = 'localhost', ports } = req.query;
-    const portList = ports ? (ports as string).split(',').map(Number) : undefined;
-    
-    const detectedServices = await PortScannerService.scanPorts(
-      host as string, 
-      portList
-    );
-    
+    let { host, ports } = req.query as { host?: string; ports?: string };
+    const portList = ports ? ports.split(',').map(Number) : undefined;
+
+    // If no host provided, default to the machine's local IP
+    if (!host || host.trim().length === 0) {
+      try {
+        host = await PortScannerService.getLocalIP();
+      } catch {
+        host = 'localhost';
+      }
+    }
+
+    const detectedServices = await PortScannerService.scanPorts(host, portList);
+
     res.json({
-      host: host as string,
+      host,
       services: detectedServices,
       count: detectedServices.length
     });
