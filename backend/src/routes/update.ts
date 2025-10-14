@@ -76,30 +76,65 @@ router.get('/check', async (req, res) => {
 // Perform update
 router.post('/perform', async (req, res) => {
   try {
+    console.log('Starting update process...');
+    
     // Check if we're in a git repository
     const { stdout: gitStatus } = await execAsync('git status --porcelain');
     if (gitStatus.trim()) {
       return res.status(400).json({ 
-        error: 'Working directory has uncommitted changes. Please commit or stash them first.' 
+        error: 'Working directory has uncommitted changes. Please commit or stash them first.',
+        details: 'The following files have uncommitted changes: ' + gitStatus.trim()
       });
     }
 
+    // Get current commit before update
+    const { stdout: currentCommit } = await execAsync('git rev-parse HEAD');
+    console.log('Current commit:', currentCommit.trim());
+
+    // Fetch latest changes from GitHub
+    console.log('Fetching latest changes from GitHub...');
+    await execAsync('git fetch origin main');
+    
     // Pull latest changes
-    await execAsync('git pull origin main');
+    console.log('Pulling latest changes...');
+    const { stdout: pullOutput } = await execAsync('git pull origin main');
+    console.log('Pull output:', pullOutput);
+
+    // Get new commit after update
+    const { stdout: newCommit } = await execAsync('git rev-parse HEAD');
+    console.log('New commit:', newCommit.trim());
+
+    // Check if there were actually changes
+    if (currentCommit.trim() === newCommit.trim()) {
+      return res.json({ 
+        message: 'Already up to date. No changes were pulled.',
+        success: true,
+        noChanges: true
+      });
+    }
     
     // Rebuild and restart services
+    console.log('Stopping services...');
     await execAsync('docker-compose down');
+    
+    console.log('Building and starting services...');
     await execAsync('docker-compose up -d --build');
     
+    console.log('Update completed successfully');
     res.json({ 
-      message: 'Update completed successfully. Services are restarting...',
-      success: true 
+      message: 'Update completed successfully! Services are restarting...',
+      success: true,
+      changes: {
+        from: currentCommit.trim().substring(0, 7),
+        to: newCommit.trim().substring(0, 7)
+      }
     });
   } catch (error) {
     console.error('Error performing update:', error);
     res.status(500).json({ 
       error: 'Failed to perform update',
-      details: error instanceof Error ? error.message : 'Unknown error'
+      details: error instanceof Error ? error.message : 'Unknown error',
+      success: false
     });
   }
 });

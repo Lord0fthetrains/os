@@ -39,26 +39,37 @@ export const UpdateWidget: React.FC<UpdateWidgetProps> = ({ className = '' }) =>
   // Perform update
   const performUpdate = async () => {
     setIsUpdating(true);
-    setUpdateStatus('Updating...');
+    setUpdateStatus('Starting update...');
     
     try {
       const response = await fetch('/api/update/perform', {
         method: 'POST'
       });
       
-      if (!response.ok) throw new Error('Update failed');
-      
       const data = await response.json();
-      setUpdateStatus(data.message || 'Update completed successfully');
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Update failed');
+      }
+      
+      if (data.noChanges) {
+        setUpdateStatus('Already up to date - no changes needed');
+      } else {
+        setUpdateStatus(data.message || 'Update completed successfully');
+        
+        if (data.changes) {
+          setUpdateStatus(`${data.message} (${data.changes.from} → ${data.changes.to})`);
+        }
+      }
       
       // Refresh update info after successful update
       setTimeout(() => {
         checkForUpdates();
-      }, 2000);
+      }, 3000);
       
     } catch (error) {
       console.error('Error updating:', error);
-      setUpdateStatus('Update failed. Please try again.');
+      setUpdateStatus(`Update failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setIsUpdating(false);
     }
