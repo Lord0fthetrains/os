@@ -284,9 +284,15 @@ build_and_start() {
         return 1
     fi
 
+    # Clean up any existing dashboard containers to prevent conflicts
+    print_status "Cleaning up any existing dashboard containers..."
+    docker-compose down 2>/dev/null || true
+    docker container rm -f linux-dashboard-backend linux-dashboard-frontend 2>/dev/null || true
+    docker network rm linux-dashboard_dashboard-network 2>/dev/null || true
+
     # Start the services
     print_status "Starting Docker containers..."
-    docker-compose up -d
+    docker-compose up -d --build
 
     if [[ $? -eq 0 ]]; then
         # Get the main IP address
