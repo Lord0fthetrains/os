@@ -8,7 +8,7 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=5200
-      - FRONTEND_URL=http://localhost:3000
+      - FRONTEND_URL=http://localhost:3200
       - OPENWEATHER_API_KEY=${OPENWEATHER_API_KEY:-}
       - NEWS_API_KEY=${NEWS_API_KEY:-}
     volumes:

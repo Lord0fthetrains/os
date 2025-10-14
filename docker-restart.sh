@@ -140,7 +140,7 @@ show_status() {
     print_status "Access URLs:"
     print_status "  Local:  http://localhost:${FRONTEND_PORT}"
     print_status "  Network: http://${MAIN_IP}:${FRONTEND_PORT}"
-    print_status "  Backend API: http://${MAIN_IP}:5000"
+    print_status "  Backend API: http://${MAIN_IP}:5200"
 }
 
 # Function to clean up

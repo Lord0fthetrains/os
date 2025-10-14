@@ -90,7 +90,7 @@ print_status "=========================================="
 print_status "Access your dashboard at:"
 print_status "  Local:  http://localhost:${FRONTEND_PORT}"
 print_status "  Network: http://${MAIN_IP}:${FRONTEND_PORT}"
-print_status "  Backend API: http://${MAIN_IP}:5000"
+print_status "  Backend API: http://${MAIN_IP}:5200"
 print_status "=========================================="
 
 # Step 6: Show logs (optional)
