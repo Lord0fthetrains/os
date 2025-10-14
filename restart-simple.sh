@@ -16,12 +16,12 @@ fi
 echo "Stopping all services..."
 docker-compose down
 
-echo "Force removing all containers..."
+echo "Force removing dashboard containers only..."
 docker-compose rm -f
 docker container rm -f linux-dashboard-backend linux-dashboard-frontend 2>/dev/null || true
 
-echo "Cleaning up unused resources..."
-docker system prune -f
+echo "Cleaning up dashboard networks..."
+docker network rm linux-dashboard_dashboard-network 2>/dev/null || true
 
 echo "Building and starting services..."
 docker-compose up -d --build

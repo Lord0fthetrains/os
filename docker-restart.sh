@@ -68,10 +68,11 @@ restart_services() {
     docker-compose down
     print_success "Services stopped"
     
-    # Clean up old containers
-    print_status "Cleaning up old containers..."
+    # Clean up dashboard containers only
+    print_status "Cleaning up dashboard containers only..."
     docker-compose rm -f
     docker container rm -f linux-dashboard-backend linux-dashboard-frontend 2>/dev/null || true
+    docker network rm linux-dashboard_dashboard-network 2>/dev/null || true
     
     # Build and start
     print_status "Building and starting services..."

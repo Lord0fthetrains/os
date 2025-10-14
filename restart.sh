@@ -47,19 +47,20 @@ else
     print_warning "Some services may not have been running"
 fi
 
-# Step 2: Clean up old containers and images (optional)
-read -p "Do you want to clean up old containers and images? (y/N): " -n 1 -r
+# Step 2: Clean up dashboard images (optional)
+read -p "Do you want to clean up old dashboard images? (y/N): " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
-    print_status "Cleaning up old containers and images..."
-    docker system prune -f
-    print_success "Cleanup completed"
+    print_status "Cleaning up old dashboard images..."
+    docker image prune -f --filter "label=project=linux-dashboard"
+    print_success "Dashboard image cleanup completed"
 fi
 
-# Step 3: Clean up old containers
-print_status "Cleaning up old containers..."
+# Step 3: Clean up dashboard containers only
+print_status "Cleaning up dashboard containers only..."
 docker-compose rm -f
 docker container rm -f linux-dashboard-backend linux-dashboard-frontend 2>/dev/null || true
+docker network rm linux-dashboard_dashboard-network 2>/dev/null || true
 
 # Step 4: Build and start services
 print_status "Building and starting services..."
