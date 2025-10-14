@@ -44,6 +44,7 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ children }
     });
 
     newSocket.on('system:stats', (stats) => {
+      console.log('Received system stats:', stats);
       setSystemStats(stats);
     });
 

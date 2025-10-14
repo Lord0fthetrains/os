@@ -68,6 +68,7 @@ export const WidgetGrid: React.FC<WidgetGridProps> = ({ className = '' }) => {
   // Subscribe to system monitoring
   useEffect(() => {
     if (socket && socket.connected) {
+      console.log('Subscribing to system and docker monitoring');
       socket.emit('subscribe:system');
       socket.emit('subscribe:docker');
     }

@@ -54,9 +54,11 @@ export class SocketHandler {
   }
 
   private async startSystemMonitoring(socket: any) {
+    console.log('Starting system monitoring for socket:', socket.id);
     const intervalId = setInterval(async () => {
       try {
         const stats = await this.systemMonitor.getSystemStats();
+        console.log('Sending system stats to socket:', socket.id, 'CPU usage:', stats.cpu.usage);
         socket.emit('system:stats', stats);
       } catch (error) {
         console.error('Error sending system stats:', error);
