@@ -59,6 +59,7 @@ fi
 # Step 3: Clean up old containers
 print_status "Cleaning up old containers..."
 docker-compose rm -f
+docker container rm -f linux-dashboard-backend linux-dashboard-frontend 2>/dev/null || true
 
 # Step 4: Build and start services
 print_status "Building and starting services..."

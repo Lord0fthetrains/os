@@ -16,8 +16,11 @@ fi
 echo "Stopping all services..."
 docker-compose down
 
-echo "Removing old containers and images..."
+echo "Force removing all containers..."
 docker-compose rm -f
+docker container rm -f linux-dashboard-backend linux-dashboard-frontend 2>/dev/null || true
+
+echo "Cleaning up unused resources..."
 docker system prune -f
 
 echo "Building and starting services..."

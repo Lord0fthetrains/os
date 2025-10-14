@@ -71,6 +71,7 @@ restart_services() {
     # Clean up old containers
     print_status "Cleaning up old containers..."
     docker-compose rm -f
+    docker container rm -f linux-dashboard-backend linux-dashboard-frontend 2>/dev/null || true
     
     # Build and start
     print_status "Building and starting services..."
