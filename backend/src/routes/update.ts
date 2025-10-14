@@ -24,9 +24,31 @@ router.get('/check', async (req, res) => {
   try {
     const currentVersion = getCurrentVersion();
     
-    // Get latest version from GitHub
-    const { stdout } = await execAsync('git ls-remote --tags https://github.com/Lord0fthetrains/os.git | tail -1');
-    const latestVersion = stdout.trim().split('/').pop()?.replace('v', '') || currentVersion;
+    // Get latest version from GitHub - try multiple methods
+    let latestVersion = currentVersion;
+    
+    try {
+      // Method 1: Try to get latest tag
+      const { stdout: tagOutput } = await execAsync('git ls-remote --tags https://github.com/Lord0fthetrains/os.git | tail -1');
+      if (tagOutput.trim()) {
+        latestVersion = tagOutput.trim().split('/').pop()?.replace('v', '') || currentVersion;
+      }
+    } catch (tagError) {
+      console.log('No tags found, checking commit hash...');
+      
+      try {
+        // Method 2: Get latest commit hash and compare with local
+        const { stdout: remoteHash } = await execAsync('git ls-remote https://github.com/Lord0fthetrains/os.git HEAD');
+        const { stdout: localHash } = await execAsync('git rev-parse HEAD');
+        
+        if (remoteHash.trim() !== localHash.trim()) {
+          // There are new commits available
+          latestVersion = `${currentVersion}-new`;
+        }
+      } catch (commitError) {
+        console.log('Could not check for updates:', commitError);
+      }
+    }
     
     // Check if we're up to date
     const isUpToDate = currentVersion === latestVersion;

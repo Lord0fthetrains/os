@@ -93,6 +93,28 @@ export const UpdateWidget: React.FC<UpdateWidgetProps> = ({ className = '' }) =>
     return 'Unable to check updates';
   };
 
+  const getVersionInfo = () => {
+    if (!updateInfo) return null;
+    
+    if (updateInfo.isUpToDate) {
+      return (
+        <div className="text-sm text-gray-600 dark:text-gray-400">
+          Version {updateInfo.currentVersion} is up to date
+        </div>
+      );
+    }
+    
+    if (updateInfo.updateAvailable) {
+      return (
+        <div className="text-sm text-yellow-600 dark:text-yellow-400">
+          New version available: v{updateInfo.latestVersion}
+        </div>
+      );
+    }
+    
+    return null;
+  };
+
   const getStatusColor = () => {
     if (isChecking || isUpdating) return 'text-blue-600 dark:text-blue-400';
     if (updateInfo?.isUpToDate) return 'text-green-600 dark:text-green-400';
@@ -124,6 +146,9 @@ export const UpdateWidget: React.FC<UpdateWidgetProps> = ({ className = '' }) =>
             </span>
           </div>
         </div>
+
+        {/* Version Info */}
+        {getVersionInfo()}
 
         {/* Update Info */}
         {updateInfo && updateInfo.updateAvailable && (
