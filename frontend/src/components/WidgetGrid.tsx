@@ -10,6 +10,7 @@ import { NewsWidget } from './widgets/NewsWidget';
 import { CryptoWidget } from './widgets/CryptoWidget';
 import { UpdateWidget } from './widgets/UpdateWidget';
 import { useWebSocket } from '../contexts/WebSocketContext';
+import { apiCall } from '../utils/api';
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
@@ -40,7 +41,7 @@ export const WidgetGrid: React.FC<WidgetGridProps> = ({ className = '' }) => {
   // Docker actions
   const handleStartContainer = async (id: string) => {
     try {
-      const response = await fetch(`/api/docker/containers/${id}/start`, { method: 'POST' });
+      const response = await apiCall(`/api/docker/containers/${id}/start`, { method: 'POST' });
       if (!response.ok) throw new Error('Failed to start container');
     } catch (error) {
       console.error('Error starting container:', error);
@@ -49,7 +50,7 @@ export const WidgetGrid: React.FC<WidgetGridProps> = ({ className = '' }) => {
 
   const handleStopContainer = async (id: string) => {
     try {
-      const response = await fetch(`/api/docker/containers/${id}/stop`, { method: 'POST' });
+      const response = await apiCall(`/api/docker/containers/${id}/stop`, { method: 'POST' });
       if (!response.ok) throw new Error('Failed to stop container');
     } catch (error) {
       console.error('Error stopping container:', error);
@@ -58,7 +59,7 @@ export const WidgetGrid: React.FC<WidgetGridProps> = ({ className = '' }) => {
 
   const handleRestartContainer = async (id: string) => {
     try {
-      const response = await fetch(`/api/docker/containers/${id}/restart`, { method: 'POST' });
+      const response = await apiCall(`/api/docker/containers/${id}/restart`, { method: 'POST' });
       if (!response.ok) throw new Error('Failed to restart container');
     } catch (error) {
       console.error('Error restarting container:', error);

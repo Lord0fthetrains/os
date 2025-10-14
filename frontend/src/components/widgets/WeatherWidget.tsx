@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Cloud, Sun, CloudRain, CloudSnow, Wind, Droplets, Eye } from 'lucide-react';
+import { apiCall } from '../../utils/api';
 
 interface WeatherData {
   current: {
@@ -30,7 +31,7 @@ export const WeatherWidget: React.FC<WeatherWidgetProps> = ({ city = 'London' })
     const fetchWeather = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`/api/widgets/weather?city=${city}`);
+        const response = await apiCall(`/api/widgets/weather?city=${city}`);
         if (!response.ok) {
           throw new Error('Failed to fetch weather data');
         }

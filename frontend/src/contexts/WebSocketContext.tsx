@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
+import { getBackendUrl } from '../utils/api';
 
 interface WebSocketContextType {
   socket: Socket | null;
@@ -31,7 +32,7 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ children }
   const [dockerStats, setDockerStats] = useState<Map<string, any>>(new Map());
 
   useEffect(() => {
-    const newSocket = io(import.meta.env.VITE_BACKEND_URL || 'http://localhost:3200');
+    const newSocket = io(getBackendUrl());
     
     newSocket.on('connect', () => {
       console.log('Connected to WebSocket server');

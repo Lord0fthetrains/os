@@ -5,6 +5,8 @@ services:
       dockerfile: Dockerfile.backend
     container_name: linux-dashboard-backend
     restart: unless-stopped
+    ports:
+      - "5200:5200"
     environment:
       - NODE_ENV=production
       - PORT=5200

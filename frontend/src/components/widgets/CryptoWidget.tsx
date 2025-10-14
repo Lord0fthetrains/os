@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { TrendingUp, TrendingDown, DollarSign } from 'lucide-react';
+import { apiCall } from '../../utils/api';
 
 interface CryptoPrice {
   id: string;
@@ -24,7 +25,7 @@ export const CryptoWidget: React.FC<CryptoWidgetProps> = ({ limit = 5 }) => {
     const fetchCrypto = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`/api/widgets/crypto?limit=${limit}`);
+        const response = await apiCall(`/api/widgets/crypto?limit=${limit}`);
         if (!response.ok) {
           throw new Error('Failed to fetch crypto data');
         }

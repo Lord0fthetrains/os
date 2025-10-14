@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Download, RefreshCw, CheckCircle, AlertCircle, Loader } from 'lucide-react';
+import { apiCall } from '../../utils/api';
 
 interface UpdateInfo {
   currentVersion: string;
@@ -23,7 +24,7 @@ export const UpdateWidget: React.FC<UpdateWidgetProps> = ({ className = '' }) =>
   const checkForUpdates = async () => {
     setIsChecking(true);
     try {
-      const response = await fetch('/api/update/check');
+      const response = await apiCall('/api/update/check');
       if (!response.ok) throw new Error('Failed to check for updates');
       
       const data = await response.json();
@@ -42,7 +43,7 @@ export const UpdateWidget: React.FC<UpdateWidgetProps> = ({ className = '' }) =>
     setUpdateStatus('Starting update...');
     
     try {
-      const response = await fetch('/api/update/perform', {
+      const response = await apiCall('/api/update/perform', {
         method: 'POST'
       });
       
