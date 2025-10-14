@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Settings, Sun, Moon, Wifi, WifiOff } from 'lucide-react';
 import { WidgetGrid } from './WidgetGrid';
+import { SettingsPanel } from './SettingsPanel';
 import { useTheme } from '../contexts/ThemeContext';
 import { useWebSocket } from '../contexts/WebSocketContext';
 
 export const Dashboard: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
   const { isConnected } = useWebSocket();
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-dark-900 transition-colors">
@@ -47,6 +49,7 @@ export const Dashboard: React.FC = () => {
               </button>
 
               <button
+                onClick={() => setIsSettingsOpen(true)}
                 className="p-2 rounded-lg bg-gray-100 dark:bg-dark-700 hover:bg-gray-200 dark:hover:bg-dark-600 transition-colors"
                 title="Settings"
               >
@@ -58,7 +61,7 @@ export const Dashboard: React.FC = () => {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
         <WidgetGrid />
       </main>
 
@@ -67,7 +70,7 @@ export const Dashboard: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400">
             <div>
-              Linux Dashboard v1.0.0 - Monitor your system with ease
+              Linux Dashboard v1.2.0 - Monitor your system with ease
             </div>
             <div className="flex items-center gap-4">
               <span>Built with React & Node.js</span>
@@ -83,6 +86,12 @@ export const Dashboard: React.FC = () => {
           </div>
         </div>
       </footer>
+
+      {/* Settings Panel */}
+      <SettingsPanel 
+        isOpen={isSettingsOpen} 
+        onClose={() => setIsSettingsOpen(false)} 
+      />
     </div>
   );
 };

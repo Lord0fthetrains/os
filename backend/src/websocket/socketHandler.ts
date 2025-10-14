@@ -30,6 +30,7 @@ export class SocketHandler {
 
       // Docker monitoring events
       socket.on('subscribe:docker', () => {
+        console.log('Starting docker monitoring for socket:', socket.id);
         this.startDockerMonitoring(socket);
       });
 

@@ -93,6 +93,56 @@
 
 /* Widget Grid Layout */
 .widget-grid-container {
-  padding-top: 1rem; /* Add top padding to prevent overlap with navigation */
-  min-height: calc(100vh - 4rem); /* Account for navigation height */
+  padding-top: 0; /* Remove extra padding since main has pt-6 */
+  min-height: calc(100vh - 8rem); /* Account for header and footer height */
+  padding-bottom: 2rem; /* Add bottom padding for better spacing */
+}
+
+/* Responsive Grid Layout */
+.react-grid-layout {
+  position: relative;
+  min-height: 100%;
+}
+
+.react-grid-item {
+  transition: all 200ms ease;
+  transition-property: left, top, width, height;
+}
+
+.react-grid-item.cssTransforms {
+  transition-property: transform, width, height;
+}
+
+.react-grid-item > .react-resizable-handle {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  bottom: 0;
+  right: 0;
+  background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNiIgaGVpZ2h0PSI2IiB2aWV3Qm94PSIwIDAgNiA2IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBkPSJNNS41IDUuNUw1LjUgMy41TDMuNSA1LjVaIiBmaWxsPSIjOTk5Ii8+Cjwvc3ZnPgo=');
+  background-position: bottom right;
+  padding: 0 3px 3px 0;
+  background-repeat: no-repeat;
+  background-origin: content-box;
+  box-sizing: border-box;
+  cursor: se-resize;
+}
+
+.react-grid-item.react-resizable {
+  transition: none;
+}
+
+/* Widget hover effects */
+.widget:hover {
+  @apply shadow-xl;
+  transform: translateY(-1px);
+}
+
+/* Widget resize handle styling */
+.react-resizable-handle {
+  @apply opacity-0 transition-opacity duration-200;
+}
+
+.widget:hover .react-resizable-handle {
+  @apply opacity-100;
 }

@@ -8,8 +8,8 @@ import { DockerWidget } from './widgets/DockerWidget';
 import { WeatherWidget } from './widgets/WeatherWidget';
 import { NewsWidget } from './widgets/NewsWidget';
 import { CryptoWidget } from './widgets/CryptoWidget';
-import { UpdateWidget } from './widgets/UpdateWidget';
 import { useWebSocket } from '../contexts/WebSocketContext';
+import { useWidgetSettings } from '../contexts/WidgetSettingsContext';
 import { apiCall } from '../utils/api';
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
@@ -20,6 +20,7 @@ interface WidgetGridProps {
 
 export const WidgetGrid: React.FC<WidgetGridProps> = ({ className = '' }) => {
   const { systemStats, dockerContainers, dockerStats, socket } = useWebSocket();
+  const { widgetConfigs, updateWidgetSize } = useWidgetSettings();
   const [layouts, setLayouts] = useState<{ [key: string]: Layout[] }>({});
   const [mounted, setMounted] = useState(false);
 
@@ -32,10 +33,22 @@ export const WidgetGrid: React.FC<WidgetGridProps> = ({ className = '' }) => {
     setMounted(true);
   }, []);
 
-  // Save layouts to localStorage
-  const handleLayoutChange = (_layout: Layout[], layouts: { [key: string]: Layout[] }) => {
+  // Save layouts to localStorage and update widget settings
+  const handleLayoutChange = (layout: Layout[], layouts: { [key: string]: Layout[] }) => {
     setLayouts(layouts);
     localStorage.setItem('dashboard-layouts', JSON.stringify(layouts));
+    
+    // Update widget sizes in settings
+    layout.forEach(item => {
+      updateWidgetSize(item.i, {
+        w: item.w,
+        h: item.h,
+        minW: item.minW,
+        minH: item.minH,
+        maxW: item.maxW,
+        maxH: item.maxH
+      });
+    });
   };
 
   // Docker actions
@@ -83,44 +96,35 @@ export const WidgetGrid: React.FC<WidgetGridProps> = ({ className = '' }) => {
     );
   }
 
-  const defaultLayouts = {
-    lg: [
-      { i: 'cpu', x: 0, y: 1, w: 3, h: 5 },
-      { i: 'ram', x: 3, y: 1, w: 3, h: 5 },
-      { i: 'disk', x: 6, y: 1, w: 3, h: 5 },
-      { i: 'network', x: 9, y: 1, w: 3, h: 5 },
-      { i: 'docker', x: 0, y: 6, w: 6, h: 7 },
-      { i: 'weather', x: 6, y: 6, w: 3, h: 5 },
-      { i: 'news', x: 9, y: 6, w: 3, h: 5 },
-      { i: 'update', x: 0, y: 13, w: 3, h: 4 },
-      { i: 'crypto', x: 3, y: 11, w: 9, h: 5 },
-    ],
-    md: [
-      { i: 'cpu', x: 0, y: 1, w: 6, h: 4 },
-      { i: 'ram', x: 6, y: 1, w: 6, h: 4 },
-      { i: 'disk', x: 0, y: 5, w: 6, h: 4 },
-      { i: 'network', x: 6, y: 5, w: 6, h: 4 },
-      { i: 'docker', x: 0, y: 9, w: 12, h: 6 },
-      { i: 'weather', x: 0, y: 15, w: 6, h: 4 },
-      { i: 'news', x: 6, y: 15, w: 6, h: 4 },
-      { i: 'crypto', x: 0, y: 19, w: 12, h: 4 },
-    ],
-    sm: [
-      { i: 'cpu', x: 0, y: 1, w: 12, h: 4 },
-      { i: 'ram', x: 0, y: 5, w: 12, h: 4 },
-      { i: 'disk', x: 0, y: 9, w: 12, h: 4 },
-      { i: 'network', x: 0, y: 13, w: 12, h: 4 },
-      { i: 'docker', x: 0, y: 17, w: 12, h: 6 },
-      { i: 'weather', x: 0, y: 23, w: 12, h: 4 },
-      { i: 'news', x: 0, y: 27, w: 12, h: 4 },
-      { i: 'crypto', x: 0, y: 31, w: 12, h: 4 },
-    ],
+
+  // Generate layouts based on enabled widgets
+  const generateLayouts = () => {
+    const enabledWidgets = widgetConfigs.filter(widget => widget.enabled);
+    const layouts: { [key: string]: Layout[] } = {};
+    
+    // Generate layouts for each breakpoint
+    const breakpoints = ['lg', 'md', 'sm', 'xs', 'xxs'];
+    breakpoints.forEach(bp => {
+      layouts[bp] = enabledWidgets.map((widget, index) => ({
+        i: widget.id,
+        x: (index * widget.size.w) % 12,
+        y: Math.floor((index * widget.size.w) / 12) * widget.size.h,
+        w: widget.size.w,
+        h: widget.size.h,
+        minW: widget.size.minW || 2,
+        minH: widget.size.minH || 3,
+        maxW: widget.size.maxW,
+        maxH: widget.size.maxH
+      }));
+    });
+    
+    return layouts;
   };
 
-  const currentLayouts = Object.keys(layouts).length > 0 ? layouts : defaultLayouts;
+  const currentLayouts = Object.keys(layouts).length > 0 ? layouts : generateLayouts();
 
   return (
-    <div className={`${className} p-4 widget-grid-container`}>
+    <div className={`${className} widget-grid-container`}>
       <ResponsiveGridLayout
         className="layout"
         layouts={currentLayouts}
@@ -135,63 +139,82 @@ export const WidgetGrid: React.FC<WidgetGridProps> = ({ className = '' }) => {
         useCSSTransforms={false}
         draggableHandle=".widget-header"
       >
-        {/* System Monitoring Widgets */}
-        <div key="cpu" className="widget">
-          <CPUWidget 
-            stats={systemStats?.cpu || { usage: 0, cores: 0, temperature: 0, loadAverage: [0, 0, 0] }}
-            history={[]}
-          />
-        </div>
-
-        <div key="ram" className="widget">
-          <RAMWidget 
-            stats={systemStats?.memory || { 
-              total: 0, used: 0, free: 0, cached: 0, 
-              swap: { total: 0, used: 0, free: 0 } 
-            }}
-          />
-        </div>
-
-        <div key="disk" className="widget">
-          <DiskWidget 
-            disks={systemStats?.disk || []}
-          />
-        </div>
-
-        <div key="network" className="widget">
-          <NetworkWidget 
-            interfaces={systemStats?.network || []}
-            history={[]}
-          />
-        </div>
-
-        {/* Docker Widget */}
-        <div key="docker" className="widget">
-          <DockerWidget
-            containers={dockerContainers}
-            containerStats={dockerStats}
-            onStartContainer={handleStartContainer}
-            onStopContainer={handleStopContainer}
-            onRestartContainer={handleRestartContainer}
-          />
-        </div>
-
-        {/* API Widgets */}
-        <div key="weather" className="widget">
-          <WeatherWidget city="London" />
-        </div>
-
-        <div key="news" className="widget">
-          <NewsWidget category="technology" limit={5} />
-        </div>
-
-        <div key="update" className="widget">
-          <UpdateWidget />
-        </div>
-
-        <div key="crypto" className="widget">
-          <CryptoWidget limit={5} />
-        </div>
+        {/* Render only enabled widgets */}
+        {widgetConfigs
+          .filter(widget => widget.enabled)
+          .map(widget => {
+            switch (widget.id) {
+              case 'cpu':
+                return (
+                  <div key="cpu" className="widget">
+                    <CPUWidget 
+                      stats={systemStats?.cpu || { usage: 0, cores: 0, temperature: 0, loadAverage: [0, 0, 0] }}
+                      history={[]}
+                    />
+                  </div>
+                );
+              case 'ram':
+                return (
+                  <div key="ram" className="widget">
+                    <RAMWidget 
+                      stats={systemStats?.memory || { 
+                        total: 0, used: 0, free: 0, cached: 0, 
+                        swap: { total: 0, used: 0, free: 0 } 
+                      }}
+                    />
+                  </div>
+                );
+              case 'disk':
+                return (
+                  <div key="disk" className="widget">
+                    <DiskWidget 
+                      disks={systemStats?.disk || []}
+                    />
+                  </div>
+                );
+              case 'network':
+                return (
+                  <div key="network" className="widget">
+                    <NetworkWidget 
+                      interfaces={systemStats?.network || []}
+                      history={[]}
+                    />
+                  </div>
+                );
+              case 'docker':
+                return (
+                  <div key="docker" className="widget">
+                    <DockerWidget
+                      containers={dockerContainers}
+                      containerStats={dockerStats}
+                      onStartContainer={handleStartContainer}
+                      onStopContainer={handleStopContainer}
+                      onRestartContainer={handleRestartContainer}
+                    />
+                  </div>
+                );
+              case 'weather':
+                return (
+                  <div key="weather" className="widget">
+                    <WeatherWidget city="London" />
+                  </div>
+                );
+              case 'news':
+                return (
+                  <div key="news" className="widget">
+                    <NewsWidget category="technology" limit={5} />
+                  </div>
+                );
+              case 'crypto':
+                return (
+                  <div key="crypto" className="widget">
+                    <CryptoWidget limit={5} />
+                  </div>
+                );
+              default:
+                return null;
+            }
+          })}
       </ResponsiveGridLayout>
     </div>
   );
