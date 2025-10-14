@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.1] - 2025-10-14
+
+### Fixed
++- Fixed version checker to properly compare with GitHub releases
++- Improved update detection accuracy
+
 ## [1.3.0] - 2025-10-14
 
 ### Added

@@ -1,6 +1,6 @@
 {
   "name": "linux-dashboard",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "A modern, web-based monitoring dashboard for Linux systems with Docker container management and public API integrations",
   "main": "index.js",
   "scripts": {
