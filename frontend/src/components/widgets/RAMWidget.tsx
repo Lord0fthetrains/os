@@ -33,10 +33,10 @@ export const RAMWidget: React.FC<RAMWidgetProps> = ({ stats }) => {
     { name: 'Free', value: stats.free, color: '#10b981' }
   ];
 
-  const swapData = [
-    { name: 'Used', value: stats.swap.used, color: '#ef4444' },
-    { name: 'Free', value: stats.swap.free, color: '#10b981' }
-  ];
+  // const swapData = [
+  //   { name: 'Used', value: stats.swap.used, color: '#ef4444' },
+  //   { name: 'Free', value: stats.swap.free, color: '#10b981' }
+  // ];
 
   const getUsageColor = (usage: number) => {
     if (usage < 60) return 'text-green-600 dark:text-green-400';

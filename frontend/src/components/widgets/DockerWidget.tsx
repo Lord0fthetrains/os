@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Container, Play, Square, RotateCcw, Terminal, Eye, EyeOff } from 'lucide-react';
 
 interface ContainerInfo {
@@ -38,18 +38,18 @@ export const DockerWidget: React.FC<DockerWidgetProps> = ({
   const [selectedContainer, setSelectedContainer] = useState<string | null>(null);
   const [showLogs, setShowLogs] = useState(false);
 
-  const getStatusColor = (state: string) => {
-    switch (state) {
-      case 'running':
-        return 'text-green-600 dark:text-green-400';
-      case 'exited':
-        return 'text-red-600 dark:text-red-400';
-      case 'paused':
-        return 'text-yellow-600 dark:text-yellow-400';
-      default:
-        return 'text-gray-600 dark:text-gray-400';
-    }
-  };
+  // const getStatusColor = (state: string) => {
+  //   switch (state) {
+  //     case 'running':
+  //       return 'text-green-600 dark:text-green-400';
+  //     case 'exited':
+  //       return 'text-red-600 dark:text-red-400';
+  //     case 'paused':
+  //       return 'text-yellow-600 dark:text-yellow-400';
+  //     default:
+  //       return 'text-gray-600 dark:text-gray-400';
+  //   }
+  // };
 
   const getStatusIcon = (state: string) => {
     switch (state) {

@@ -35,16 +35,16 @@ export class DockerService {
     try {
       const containers = await this.docker.listContainers({ all: true });
       
-      return containers.map(container => ({
+      return containers.map((container: any) => ({
         id: container.Id,
         name: container.Names[0]?.replace('/', '') || 'Unknown',
         image: container.Image,
         status: container.Status,
         state: container.State,
         created: container.Created,
-        ports: Object.keys(container.Ports).map(port => 
-          `${port.privatePort}${port.publicPort ? `:${port.publicPort}` : ''}`
-        )
+        ports: container.Ports ? container.Ports.map((port: any) => 
+          `${port.PrivatePort}${port.PublicPort ? `:${port.PublicPort}` : ''}`
+        ) : []
       }));
     } catch (error) {
       console.error('Error getting containers:', error);
@@ -145,11 +145,11 @@ export class DockerService {
         timestamps: true
       });
       
-      stream.on('data', (chunk) => {
+      stream.on('data', (chunk: any) => {
         callback(chunk.toString());
       });
       
-      stream.on('error', (error) => {
+      stream.on('error', (error: any) => {
         console.error('Error streaming container logs:', error);
       });
     } catch (error) {

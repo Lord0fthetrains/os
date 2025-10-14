@@ -9,7 +9,6 @@ import { WeatherWidget } from './widgets/WeatherWidget';
 import { NewsWidget } from './widgets/NewsWidget';
 import { CryptoWidget } from './widgets/CryptoWidget';
 import { useWebSocket } from '../contexts/WebSocketContext';
-import { useTheme } from '../contexts/ThemeContext';
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
@@ -19,7 +18,6 @@ interface WidgetGridProps {
 
 export const WidgetGrid: React.FC<WidgetGridProps> = ({ className = '' }) => {
   const { systemStats, dockerContainers, dockerStats, socket } = useWebSocket();
-  const { theme } = useTheme();
   const [layouts, setLayouts] = useState<{ [key: string]: Layout[] }>({});
   const [mounted, setMounted] = useState(false);
 
@@ -33,7 +31,7 @@ export const WidgetGrid: React.FC<WidgetGridProps> = ({ className = '' }) => {
   }, []);
 
   // Save layouts to localStorage
-  const handleLayoutChange = (layout: Layout[], layouts: { [key: string]: Layout[] }) => {
+  const handleLayoutChange = (_layout: Layout[], layouts: { [key: string]: Layout[] }) => {
     setLayouts(layouts);
     localStorage.setItem('dashboard-layouts', JSON.stringify(layouts));
   };

@@ -83,7 +83,7 @@ export class SystemMonitor {
       usage: Math.round(cpuLoad.currentLoad),
       cores: cpuLoad.cpus.length,
       temperature: cpuTemp.main || 0,
-      loadAverage: cpuLoad.avgLoad
+      loadAverage: Array.isArray(cpuLoad.avgLoad) ? cpuLoad.avgLoad : [0, 0, 0]
     };
   }
 
