@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import systemRoutes from './routes/system';
 import dockerRoutes from './routes/docker';
 import widgetRoutes from './routes/widgets';
+import updateRoutes from './routes/update';
 import { SocketHandler } from './websocket/socketHandler';
 
 // Load environment variables
@@ -31,6 +32,7 @@ app.use(express.json());
 app.use('/api/system', systemRoutes);
 app.use('/api/docker', dockerRoutes);
 app.use('/api/widgets', widgetRoutes);
+app.use('/api/update', updateRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

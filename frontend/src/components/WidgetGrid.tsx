@@ -8,6 +8,7 @@ import { DockerWidget } from './widgets/DockerWidget';
 import { WeatherWidget } from './widgets/WeatherWidget';
 import { NewsWidget } from './widgets/NewsWidget';
 import { CryptoWidget } from './widgets/CryptoWidget';
+import { UpdateWidget } from './widgets/UpdateWidget';
 import { useWebSocket } from '../contexts/WebSocketContext';
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
@@ -89,7 +90,8 @@ export const WidgetGrid: React.FC<WidgetGridProps> = ({ className = '' }) => {
       { i: 'docker', x: 0, y: 5, w: 6, h: 7 },
       { i: 'weather', x: 6, y: 5, w: 3, h: 5 },
       { i: 'news', x: 9, y: 5, w: 3, h: 5 },
-      { i: 'crypto', x: 6, y: 10, w: 6, h: 5 },
+      { i: 'update', x: 0, y: 12, w: 3, h: 4 },
+      { i: 'crypto', x: 3, y: 10, w: 9, h: 5 },
     ],
     md: [
       { i: 'cpu', x: 0, y: 0, w: 6, h: 4 },
@@ -179,6 +181,10 @@ export const WidgetGrid: React.FC<WidgetGridProps> = ({ className = '' }) => {
 
         <div key="news" className="widget">
           <NewsWidget category="technology" limit={5} />
+        </div>
+
+        <div key="update" className="widget">
+          <UpdateWidget />
         </div>
 
         <div key="crypto" className="widget">
