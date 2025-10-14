@@ -300,7 +300,7 @@ build_and_start() {
         
         print_success "Dashboard started successfully!"
         print_status "Access your dashboard at: http://${MAIN_IP}:3200"
-        print_status "Backend API at: http://${MAIN_IP}:5000"
+        print_status "Backend API at: http://${MAIN_IP}:5200"
         echo ""
         print_status "Useful commands:"
         echo "  View logs: docker-compose logs -f"

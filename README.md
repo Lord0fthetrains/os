@@ -91,7 +91,7 @@ Create a `.env` file in the project root:
 
 ```env
 # Backend Configuration
-PORT=5000
+PORT=5200
 FRONTEND_URL=http://localhost:3200
 
 # API Keys (optional)
@@ -164,7 +164,7 @@ cd backend
 npm run dev
 ```
 
-The backend will start on http://localhost:5000
+The backend will start on http://localhost:5200
 
 ### Frontend Development
 
@@ -265,7 +265,7 @@ sudo lsof -i :3000
 ```
 
 #### WebSocket Connection Failed
-- Ensure the backend is running on port 5000
+- Ensure the backend is running on port 5200
 - Check firewall settings
 - Verify Docker network configuration
 

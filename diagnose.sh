@@ -26,11 +26,11 @@ docker-compose logs --tail=20 frontend
 echo ""
 echo "3. Testing API endpoints..."
 echo "Testing backend health check..."
-curl -s http://localhost:5000/api/health || echo "Backend health check failed"
+curl -s http://localhost:3200/api/health || echo "Backend health check failed"
 
 echo ""
 echo "Testing system stats API..."
-curl -s http://localhost:5000/api/system/stats | head -c 200 || echo "System stats API failed"
+curl -s http://localhost:3200/api/system/stats | head -c 200 || echo "System stats API failed"
 
 echo ""
 echo "4. Checking network connectivity..."
@@ -44,7 +44,7 @@ curl -s -o /dev/null -w "%{http_code}" http://localhost:3200 || echo "Frontend n
 
 echo ""
 echo "Backend accessible:"
-curl -s -o /dev/null -w "%{http_code}" http://localhost:5000 || echo "Backend not accessible"
+curl -s -o /dev/null -w "%{http_code}" http://localhost:3200 || echo "Backend not accessible"
 
 echo ""
 echo "6. Checking Docker container resource usage..."
