@@ -31,7 +31,7 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ children }
   const [dockerStats, setDockerStats] = useState<Map<string, any>>(new Map());
 
   useEffect(() => {
-    const newSocket = io(import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000');
+    const newSocket = io(import.meta.env.VITE_BACKEND_URL || 'http://localhost:3200');
     
     newSocket.on('connect', () => {
       console.log('Connected to WebSocket server');
