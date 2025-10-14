@@ -90,3 +90,9 @@
     opacity: .5;
   }
 }
+
+/* Widget Grid Layout */
+.widget-grid-container {
+  padding-top: 1rem; /* Add top padding to prevent overlap with navigation */
+  min-height: calc(100vh - 4rem); /* Account for navigation height */
+}

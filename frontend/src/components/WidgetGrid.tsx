@@ -83,42 +83,42 @@ export const WidgetGrid: React.FC<WidgetGridProps> = ({ className = '' }) => {
 
   const defaultLayouts = {
     lg: [
-      { i: 'cpu', x: 0, y: 0, w: 3, h: 5 },
-      { i: 'ram', x: 3, y: 0, w: 3, h: 5 },
-      { i: 'disk', x: 6, y: 0, w: 3, h: 5 },
-      { i: 'network', x: 9, y: 0, w: 3, h: 5 },
-      { i: 'docker', x: 0, y: 5, w: 6, h: 7 },
-      { i: 'weather', x: 6, y: 5, w: 3, h: 5 },
-      { i: 'news', x: 9, y: 5, w: 3, h: 5 },
-      { i: 'update', x: 0, y: 12, w: 3, h: 4 },
-      { i: 'crypto', x: 3, y: 10, w: 9, h: 5 },
+      { i: 'cpu', x: 0, y: 1, w: 3, h: 5 },
+      { i: 'ram', x: 3, y: 1, w: 3, h: 5 },
+      { i: 'disk', x: 6, y: 1, w: 3, h: 5 },
+      { i: 'network', x: 9, y: 1, w: 3, h: 5 },
+      { i: 'docker', x: 0, y: 6, w: 6, h: 7 },
+      { i: 'weather', x: 6, y: 6, w: 3, h: 5 },
+      { i: 'news', x: 9, y: 6, w: 3, h: 5 },
+      { i: 'update', x: 0, y: 13, w: 3, h: 4 },
+      { i: 'crypto', x: 3, y: 11, w: 9, h: 5 },
     ],
     md: [
-      { i: 'cpu', x: 0, y: 0, w: 6, h: 4 },
-      { i: 'ram', x: 6, y: 0, w: 6, h: 4 },
-      { i: 'disk', x: 0, y: 4, w: 6, h: 4 },
-      { i: 'network', x: 6, y: 4, w: 6, h: 4 },
-      { i: 'docker', x: 0, y: 8, w: 12, h: 6 },
-      { i: 'weather', x: 0, y: 14, w: 6, h: 4 },
-      { i: 'news', x: 6, y: 14, w: 6, h: 4 },
-      { i: 'crypto', x: 0, y: 18, w: 12, h: 4 },
+      { i: 'cpu', x: 0, y: 1, w: 6, h: 4 },
+      { i: 'ram', x: 6, y: 1, w: 6, h: 4 },
+      { i: 'disk', x: 0, y: 5, w: 6, h: 4 },
+      { i: 'network', x: 6, y: 5, w: 6, h: 4 },
+      { i: 'docker', x: 0, y: 9, w: 12, h: 6 },
+      { i: 'weather', x: 0, y: 15, w: 6, h: 4 },
+      { i: 'news', x: 6, y: 15, w: 6, h: 4 },
+      { i: 'crypto', x: 0, y: 19, w: 12, h: 4 },
     ],
     sm: [
-      { i: 'cpu', x: 0, y: 0, w: 12, h: 4 },
-      { i: 'ram', x: 0, y: 4, w: 12, h: 4 },
-      { i: 'disk', x: 0, y: 8, w: 12, h: 4 },
-      { i: 'network', x: 0, y: 12, w: 12, h: 4 },
-      { i: 'docker', x: 0, y: 16, w: 12, h: 6 },
-      { i: 'weather', x: 0, y: 22, w: 12, h: 4 },
-      { i: 'news', x: 0, y: 26, w: 12, h: 4 },
-      { i: 'crypto', x: 0, y: 30, w: 12, h: 4 },
+      { i: 'cpu', x: 0, y: 1, w: 12, h: 4 },
+      { i: 'ram', x: 0, y: 5, w: 12, h: 4 },
+      { i: 'disk', x: 0, y: 9, w: 12, h: 4 },
+      { i: 'network', x: 0, y: 13, w: 12, h: 4 },
+      { i: 'docker', x: 0, y: 17, w: 12, h: 6 },
+      { i: 'weather', x: 0, y: 23, w: 12, h: 4 },
+      { i: 'news', x: 0, y: 27, w: 12, h: 4 },
+      { i: 'crypto', x: 0, y: 31, w: 12, h: 4 },
     ],
   };
 
   const currentLayouts = Object.keys(layouts).length > 0 ? layouts : defaultLayouts;
 
   return (
-    <div className={`${className} p-4`}>
+    <div className={`${className} p-4 widget-grid-container`}>
       <ResponsiveGridLayout
         className="layout"
         layouts={currentLayouts}
