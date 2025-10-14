@@ -48,7 +48,7 @@ else
 fi
 
 # Step 2: Clean up old containers and images (optional)
-read -p "Do you want to clean up old containers and images? (y/N): " -n 1 -r 
+read -p "Do you want to clean up old containers and images? (y/N): " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     print_status "Cleaning up old containers and images..."
