@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.0] - 2025-10-14
+
+### Added
+- New pages: Logs, Users, Alerts, Service Controls
+- Backend APIs: `/api/logs/*`, `/api/users/*`, `/api/alerts`, `/api/services/*`
+- ServerSphere dark theme extended across new pages
+- Sidebar: Detected Services can be pinned and shown when collapsed
+
+### Changed
+- Services page and sidebar now scan using host IP by default
+
+### Fixed
+- Minor UI polish and stability improvements
+
 ## [1.2.0] - 2025-01-14
 
 ### Added
