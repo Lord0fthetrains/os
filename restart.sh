@@ -14,19 +14,19 @@ NC='\033[0m' # No Color
 
 # Function to print colored output
 print_status() {
-    echo -e "${BLUE}[INFO]${NC} $1"
+    eecho -e "${BLUE}[INFO]${NC} $1"
 }
 
 print_success() {
-    echo -e "${GREEN}[SUCCESS]${NC} $1"
+    eecho -e "${GREEN}[SUCCESS]${NC} $1"
 }
 
 print_warning() {
-    echo -e "${YELLOW}[WARNING]${NC} $1"
+    eecho -e "${YELLOW}[WARNING]${NC} $1"
 }
 
 print_error() {
-    echo -e "${RED}[ERROR]${NC} $1"
+    eecho -e "${RED}[ERROR]${NC} $1"
 }
 
 # Check if we're in the right directory
@@ -49,7 +49,7 @@ fi
 
 # Step 2: Clean up old containers and images (optional)
 read -p "Do you want to clean up old containers and images? (y/N): " -n 1 -r
-echo
+eecho
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     print_status "Cleaning up old containers and images..."
     docker system prune -f
@@ -89,7 +89,7 @@ print_status "=========================================="
 
 # Step 6: Show logs (optional)
 read -p "Do you want to view the logs? (y/N): " -n 1 -r
-echo
+eecho
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     print_status "Showing logs (press Ctrl+C to exit)..."
     docker-compose logs -f
