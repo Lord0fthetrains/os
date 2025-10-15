@@ -114,46 +114,36 @@ router.post('/perform', async (req, res) => {
       });
     }
     
-    // Rebuild and restart services
-    console.log('Stopping services...');
+    // Rebuild and restart services using restart script
+    console.log('Restarting services using restart script...');
     try {
-      await execAsync('docker-compose down');
-    } catch (dockerError) {
-      console.log('Docker-compose not available, trying docker compose...');
+      // Use the simple restart script which handles Docker commands properly
+      // Add timeout to prevent hanging
+      await execAsync('timeout 300 bash ./restart-simple.sh || bash ./restart-simple.sh');
+      console.log('Services restarted successfully');
+    } catch (restartError) {
+      console.log('Restart script failed, trying alternative methods...');
       try {
-        await execAsync('docker compose down');
-      } catch (dockerComposeError) {
-        console.log('Docker not available, skipping service restart');
-        return res.json({ 
-          message: 'Code updated successfully, but Docker services could not be restarted automatically.',
-          success: true,
-          warning: 'Docker not available - please restart services manually',
-          changes: {
-            from: currentCommit.trim().substring(0, 7),
-            to: newCommit.trim().substring(0, 7)
-          }
-        });
-      }
-    }
-    
-    console.log('Building and starting services...');
-    try {
-      await execAsync('docker-compose up -d --build');
-    } catch (dockerError) {
-      console.log('Docker-compose not available, trying docker compose...');
-      try {
-        await execAsync('docker compose up -d --build');
-      } catch (dockerComposeError) {
-        console.log('Docker not available, skipping service restart');
-        return res.json({ 
-          message: 'Code updated successfully, but Docker services could not be restarted automatically.',
-          success: true,
-          warning: 'Docker not available - please restart services manually',
-          changes: {
-            from: currentCommit.trim().substring(0, 7),
-            to: newCommit.trim().substring(0, 7)
-          }
-        });
+        // Fallback to docker-compose commands
+        await execAsync('docker-compose down && docker-compose up -d --build');
+        console.log('Services restarted using docker-compose');
+      } catch (dockerError) {
+        console.log('Docker-compose not available, trying docker compose...');
+        try {
+          await execAsync('docker compose down && docker compose up -d --build');
+          console.log('Services restarted using docker compose');
+        } catch (dockerComposeError) {
+          console.log('Docker not available, skipping service restart');
+          return res.json({ 
+            message: 'Code updated successfully, but Docker services could not be restarted automatically.',
+            success: true,
+            warning: 'Docker not available - please restart services manually using: ./restart-simple.sh',
+            changes: {
+              from: currentCommit.trim().substring(0, 7),
+              to: newCommit.trim().substring(0, 7)
+            }
+          });
+        }
       }
     }
     
