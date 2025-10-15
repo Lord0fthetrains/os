@@ -20,7 +20,7 @@ export interface VersionInfo {
 
 export class VersionService {
   private static readonly GITHUB_API_URL = 'https://api.github.com/repos/Lord0fthetrains/os/releases/latest';
-  private static readonly CURRENT_VERSION = '1.2.0';
+  private static readonly CURRENT_VERSION = '1.3.0';
 
   static async checkForUpdates(): Promise<VersionInfo> {
     try {

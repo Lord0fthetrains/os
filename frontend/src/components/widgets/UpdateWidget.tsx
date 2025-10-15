@@ -19,18 +19,33 @@ export const UpdateWidget: React.FC<UpdateWidgetProps> = ({ className = '' }) =>
   const [isChecking, setIsChecking] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [updateStatus, setUpdateStatus] = useState<string>('');
+  const [consoleOutput, setConsoleOutput] = useState<string[]>([]);
+  const [showConsole, setShowConsole] = useState(false);
+
+  // Add console log
+  const addConsoleLog = (message: string) => {
+    const timestamp = new Date().toLocaleTimeString();
+    setConsoleOutput(prev => [...prev, `[${timestamp}] ${message}`]);
+  };
 
   // Check for updates
   const checkForUpdates = async () => {
     setIsChecking(true);
+    addConsoleLog('Checking for updates...');
     try {
       const response = await apiCall('/api/update/check');
-      if (!response.ok) throw new Error('Failed to check for updates');
+      if (!response.ok) {
+        addConsoleLog(`Error: HTTP ${response.status} - ${response.statusText}`);
+        throw new Error('Failed to check for updates');
+      }
       
       const data = await response.json();
+      addConsoleLog(`Current version: ${data.currentVersion}, Latest: ${data.latestVersion}`);
+      addConsoleLog(`Update available: ${data.updateAvailable ? 'Yes' : 'No'}`);
       setUpdateInfo(data);
     } catch (error) {
       console.error('Error checking for updates:', error);
+      addConsoleLog(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
       setUpdateStatus('Failed to check for updates');
     } finally {
       setIsChecking(false);
@@ -41,38 +56,50 @@ export const UpdateWidget: React.FC<UpdateWidgetProps> = ({ className = '' }) =>
   const performUpdate = async () => {
     setIsUpdating(true);
     setUpdateStatus('Starting update...');
+    setConsoleOutput([]); // Clear previous console output
+    addConsoleLog('Starting update process...');
     
     try {
+      addConsoleLog('Sending update request to backend...');
       const response = await apiCall('/api/update/perform', {
         method: 'POST'
       });
       
+      addConsoleLog(`Response status: ${response.status} ${response.statusText}`);
       const data = await response.json();
+      addConsoleLog(`Response data: ${JSON.stringify(data, null, 2)}`);
       
       if (!response.ok) {
+        addConsoleLog(`Error: ${data.error || 'Update failed'}`);
         throw new Error(data.error || 'Update failed');
       }
       
       if (data.noChanges) {
+        addConsoleLog('No changes detected - already up to date');
         setUpdateStatus('Already up to date - no changes needed');
       } else {
+        addConsoleLog('Update completed successfully');
         setUpdateStatus(data.message || 'Update completed successfully');
         
         if (data.changes) {
+          addConsoleLog(`Changes: ${data.changes.from} → ${data.changes.to}`);
           setUpdateStatus(`${data.message} (${data.changes.from} → ${data.changes.to})`);
         }
       }
       
       // Refresh update info after successful update
       setTimeout(() => {
+        addConsoleLog('Refreshing update info...');
         checkForUpdates();
       }, 3000);
       
     } catch (error) {
       console.error('Error updating:', error);
+      addConsoleLog(`Update failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
       setUpdateStatus(`Update failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setIsUpdating(false);
+      addConsoleLog('Update process finished');
     }
   };
 
@@ -210,7 +237,32 @@ export const UpdateWidget: React.FC<UpdateWidgetProps> = ({ className = '' }) =>
               {isUpdating ? 'Updating...' : 'Update Now'}
             </button>
           )}
+
+          {/* Console Toggle */}
+          <button
+            onClick={() => setShowConsole(!showConsole)}
+            className="flex items-center gap-2 px-3 py-2 text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+          >
+            <span className="text-xs">📋</span>
+            {showConsole ? 'Hide Console' : 'Show Console'}
+          </button>
         </div>
+
+        {/* Console Output */}
+        {showConsole && (
+          <div className="bg-gray-900 text-green-400 p-3 rounded-lg font-mono text-xs max-h-48 overflow-y-auto">
+            <div className="text-gray-500 mb-2 text-xs">Console Output:</div>
+            {consoleOutput.length === 0 ? (
+              <div className="text-gray-600">No console output yet...</div>
+            ) : (
+              consoleOutput.map((line, index) => (
+                <div key={index} className="mb-1">
+                  {line}
+                </div>
+              ))
+            )}
+          </div>
+        )}
 
         {/* Last Checked */}
         {updateInfo?.lastChecked && (
