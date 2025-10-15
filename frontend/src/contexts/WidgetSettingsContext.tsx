@@ -30,6 +30,7 @@ const defaultWidgetConfigs: WidgetConfig[] = [
   { id: 'weather', name: 'Weather', enabled: true, size: { w: 3, h: 4, minW: 2, minH: 3 } },
   { id: 'news', name: 'News', enabled: true, size: { w: 3, h: 4, minW: 2, minH: 3 } },
   { id: 'crypto', name: 'Cryptocurrency', enabled: true, size: { w: 3, h: 4, minW: 2, minH: 3 } },
+  { id: 'update', name: 'System Updates', enabled: true, size: { w: 3, h: 4, minW: 2, minH: 3 } },
 ];
 
 const WidgetSettingsContext = createContext<WidgetSettingsContextType | undefined>(undefined);

@@ -8,6 +8,7 @@ import { DockerWidget } from './widgets/DockerWidget';
 import { WeatherWidget } from './widgets/WeatherWidget';
 import { NewsWidget } from './widgets/NewsWidget';
 import { CryptoWidget } from './widgets/CryptoWidget';
+import { UpdateWidget } from './widgets/UpdateWidget';
 import { useWebSocket } from '../contexts/WebSocketContext';
 import { useWidgetSettings } from '../contexts/WidgetSettingsContext';
 import { apiCall } from '../utils/api';
@@ -209,6 +210,12 @@ export const WidgetGrid: React.FC<WidgetGridProps> = ({ className = '' }) => {
                 return (
                   <div key="crypto" className="widget">
                     <CryptoWidget limit={5} />
+                  </div>
+                );
+              case 'update':
+                return (
+                  <div key="update" className="widget">
+                    <UpdateWidget />
                   </div>
                 );
               default:

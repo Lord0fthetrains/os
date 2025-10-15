@@ -28,10 +28,11 @@ router.get('/check', async (req, res) => {
     let latestVersion = currentVersion;
     
     try {
-      // Method 1: Try to get latest tag
-      const { stdout: tagOutput } = await execAsync('git ls-remote --tags https://github.com/Lord0fthetrains/os.git | tail -1');
+      // Method 1: Try to get latest tag (sorted by version)
+      const { stdout: tagOutput } = await execAsync('git ls-remote --tags https://github.com/Lord0fthetrains/os.git | grep -E "refs/tags/v[0-9]" | sort -V | tail -1');
       if (tagOutput.trim()) {
         latestVersion = tagOutput.trim().split('/').pop()?.replace('v', '') || currentVersion;
+        console.log('Latest tag found:', latestVersion);
       }
     } catch (tagError) {
       console.log('No tags found, checking commit hash...');
